@@ -65,14 +65,14 @@ app.post('/company', async(req, res)=> {
 
 // I want to get all products 
 
-app.get('/product', async (req, res) => {
+app.get('/products', async (req, res) => {
   let products = await Product.findAll()
   res.json({products});
 })
 
 // I want to find a certain product 
 
-app.get('/products/:id', async (req, res) => {
+app.get('/product/:id', async (req, res) => {
   let product = await Product.findByPk(req.params.id);
   res.json({product});
 })
@@ -93,7 +93,7 @@ app.post('/product', async(req, res)=> {
 
 // I want to update one product 
 
-app.put('/products/:id', async(req, res)=> {
+app.put('/product/:id', async(req, res)=> {
   let updatedProduct = await Product.update(req.body, {
     where : {id : req.params.id}
   });
