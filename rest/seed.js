@@ -6,10 +6,14 @@ const {sequelize} = require('./db');
 const {User, Company, Product} = require('./models');
 
 const createUsers = async () => {
+
+    let bpw = await bcrypt.hash('bob1234', 2)
+    let cpw = await bcrypt.hash('chris2021',3)
+    let spw = await bcrypt.hash('kind88',4)
     const users = [
-        {name : 'Bobby', password: 'bob1234'},
-        {name : 'Chris', password : 'chris2021'},
-        {name : 'Sharon', password : 'kind88'}
+        {name : 'Bobby', password: bpw},
+        {name : 'Chris', password : cpw},
+        {name : 'Sharon', password : spw}
     ];
 
     return users
