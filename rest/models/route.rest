@@ -1,35 +1,45 @@
-# GET http://localhost:3000/
+GET http://localhost:3000/
+###
 
 GET http://localhost:3000/users
+###
 
-# GET http://localhost:3000/users/1
+GET http://localhost:3000/users/1
+###
 
-# GET http://localhost:3000/companies
+GET http://localhost:3000/companies
+###
 
-# GET http://localhost:3000/company/1
+GET http://localhost:3000/company/1
+###
 
-# GET http://localhost:3000/products
+GET http://localhost:3000/products
+###
 
-# GET http://localhost:3000/product/1
+GET http://localhost:3000/product/1
+###
 
 DELETE http://localhost:3000/user/1
+###
 
-# POST http://localhost:3000/user
-# Content-Type: application/json
+POST http://localhost:3000/user
+Content-Type: application/json
 
-# {
-# "name" : "Eric", "password": "ric2020"
-# }
+{
+"name" : "Eric", "password": "ric2020"
+}
+###
 
-# PUT http://localhost:3000/product/1
-# Content-Type: application/json
+PUT http://localhost:3000/product/1
+Content-Type: application/json
 
-# {
-#     "name" : "Rocking Chair",
-#     "price" : 300.00
-# }
+{
+    "name" : "Rocking Chair",
+    "price" : 300.00
+}
+###
 
-# GET http://localhost:3000/products
+GET http://localhost:3000/products
 
 
 
