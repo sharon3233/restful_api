@@ -1,30 +1,57 @@
 const express = require("express");
-const basicAuth = require('express-basic-auth');
+// const basicAuth = require('express-basic-auth');
 const bcrypt = require('bcrypt');
+
+//Boilerplate dependencies for Auth0
+const jwt = require('express-jwt');
+const jwks = require('jwks-rsa');
+const cors = require('cors'); 
+
+require('dotenv').config('.env')
 
 const {User, Company, Product} = require('./models');
 
 // initialise Express
 const app = express();
 
+//allow cross-origin resource sharing
+app.use(cors());
+
 // specify out request bodies are json
 app.use(express.json());
 
-app.use(basicAuth({
-  authorizer : dbAuthorizer,
-  authorizeAsync: true,
-  unauthorizedResponse : () => 'Wrong password'
-}))
-async function dbAuthorizer(username, password, callback) {
-  try {
-    const user = await User.findOne({where : {name : username}})
-    let isValid = (user != null) ? await bcrypt.compare(password, user.password) : false;
-    callback(null, isValid)
-  } catch(err) {
-    console.log("ALERT ALERT AN ERROR", err)
-  }
+// JWT Boilerplate
 
-}
+const checkJwt = jwt({
+  secret: jwks.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://${process.env.AUTH0_DOMAIN}.well-known/jwks.json`
+  }),
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: `https://${process.env.AUTH0_DOMAIN}`,
+  algorithms: ['RS256']
+  });
+
+
+  // using basicAuth 
+  
+// app.use(basicAuth({
+//   authorizer : dbAuthorizer,
+//   authorizeAsync: true,
+//   unauthorizedResponse : () => 'Wrong password'
+// }))
+// async function dbAuthorizer(username, password, callback) {
+//   try {
+//     const user = await User.findOne({where : {name : username}})
+//     let isValid = (user != null) ? await bcrypt.compare(password, user.password) : false;
+//     callback(null, isValid)
+//   } catch(err) {
+//     console.log("ALERT ALERT AN ERROR", err)
+//   }
+
+// }
 
 
 
@@ -70,7 +97,7 @@ app.get('/', (req, res) => {
   res.send('<h1>RESTful API Assignment</h1>')
 })
 
-app.get('/users', async (req, res) => {
+app.get('/users', checkJwt,  async (req, res) => {
   //what should i put here?
   let users = await User.findAll()
   res.json({users});
@@ -121,7 +148,7 @@ app.post('/company', async(req, res)=> {
 
 // I want to get all products 
 
-app.get('/products', async (req, res) => {
+app.get('/products', checkJwt, async (req, res) => {
   let products = await Product.findAll()
   res.json({products});
 })
